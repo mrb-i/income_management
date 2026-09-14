@@ -1,0 +1,2271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Income Management</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-64.png" sizes="64x64">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Income Mgmt">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EEF2F1">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0E1615">
+<script src="vendor/xlsx.full.min.js"></script>
+<style>
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/fraunces-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/fraunces-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Fraunces';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/fraunces-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/ibm-plex-sans-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/ibm-plex-sans-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/ibm-plex-sans-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/ibm-plex-mono-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;}
+img{max-width:100%}
+[hidden]:not([hidden=until-found i]){display:none!important}
+</style>
+</head>
+<body>
+<style>
+  :root{
+    color-scheme: light;
+    --bg: #EEF2F1;
+    --surface: #FFFFFF;
+    --surface-2: #F4F8F7;
+    --ink: #13201D;
+    --ink-soft: #55645F;
+    --muted: #8B9A94;
+    --line: #DCE4E1;
+    --line-strong: #C3CFCA;
+    --accent: #0A8C7D;
+    --accent-soft: #E1F1EE;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+    --series-5: #e87ba4;
+    --series-6: #008300;
+    --series-7: #4a3aa7;
+    --series-8: #e34948;
+    --good: #0ca30c;
+    --good-ink: #0a7a0a;
+    --good-tint: #E3F6E1;
+    --critical: #d03b3b;
+    --critical-tint: #FBE6E6;
+    --shadow: 0 1px 2px rgba(19,32,29,0.05), 0 6px 20px -12px rgba(19,32,29,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --bg: #0E1615;
+      --surface: #16211F;
+      --surface-2: #1B2622;
+      --ink: #EAF1EE;
+      --ink-soft: #A9BAB5;
+      --muted: #7C8C87;
+      --line: #29332F;
+      --line-strong: #37423D;
+      --accent: #1F9C87;
+      --accent-soft: #1B2E2A;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --series-5: #d55181;
+      --series-6: #008300;
+      --series-7: #9085e9;
+      --series-8: #e66767;
+      --good: #2FBE55;
+      --good-ink: #4FD673;
+      --good-tint: #16321F;
+      --critical: #E6675E;
+      --critical-tint: #3A1E1C;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -16px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --bg: #0E1615;
+    --surface: #16211F;
+    --surface-2: #1B2622;
+    --ink: #EAF1EE;
+    --ink-soft: #A9BAB5;
+    --muted: #7C8C87;
+    --line: #29332F;
+    --line-strong: #37423D;
+    --accent: #1F9C87;
+    --accent-soft: #1B2E2A;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+    --good: #2FBE55;
+    --good-ink: #4FD673;
+    --good-tint: #16321F;
+    --critical: #E6675E;
+    --critical-tint: #3A1E1C;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -16px rgba(0,0,0,0.55);
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+  }
+  .wrap{
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.75rem 1.25rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  /* ---------- header ---------- */
+  header{ display:flex; flex-direction:column; gap:.4rem; }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color: var(--accent);
+    font-weight:500;
+  }
+  h1{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.35rem);
+    margin:0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .sub{ color: var(--ink-soft); font-size:.98rem; max-width:56ch; }
+  .meta{ color: var(--muted); font-size:.82rem; }
+
+  /* ---------- stat grid ---------- */
+  .stat-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .stat{
+    background: var(--surface);
+    padding: 1.05rem 1.1rem;
+    display:flex;
+    flex-direction:column;
+    gap:.3rem;
+    min-width:0;
+  }
+  .stat-label{
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    color: var(--muted);
+    font-weight:500;
+  }
+  .stat-value{
+    font-family:"IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight:600;
+    font-size: clamp(1.05rem, .95rem + .5vw, 1.35rem);
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .stat-value.good{ color: var(--good-ink); }
+  .stat-value.critical{ color: var(--critical); }
+  .stat-note{ font-size:.76rem; color: var(--ink-soft); display:flex; align-items:center; gap:.35rem; }
+  .dot{ width:7px; height:7px; border-radius:50%; flex:none; }
+  .dot.good{ background: var(--good); }
+  .dot.critical{ background: var(--critical); }
+  .dot.neutral{ background: var(--muted); }
+
+  @media (max-width: 720px){
+    .stat-grid{ grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* ---------- allocation bar ---------- */
+  .bar-card{
+    background: var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:1.25rem 1.35rem 1.35rem;
+    box-shadow: var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:.9rem;
+  }
+  .bar-head{ display:flex; justify-content:space-between; align-items:baseline; gap:1rem; flex-wrap:wrap; }
+  .bar-title{ font-weight:600; font-size:.95rem; }
+  .bar-title-note{ font-size:.78rem; color: var(--muted); }
+  .bar-track{
+    position: relative;
+    display:flex;
+    gap:2px;
+    height:26px;
+    background: var(--line);
+    border-radius:6px;
+    overflow:visible;
+  }
+  .bar-seg{
+    height:100%;
+    border-radius:4px;
+    min-width:0;
+    transition: width .25s ease;
+  }
+  .bar-segments{ display:flex; gap:2px; flex:1; min-width:0; }
+  .bar-seg.savings{ background: var(--good); }
+  .income-marker{
+    position:absolute;
+    top:-4px;
+    bottom:-4px;
+    width:2px;
+    background: var(--critical);
+    display:none;
+  }
+  .income-marker::before{
+    content:"";
+    position:absolute;
+    top:-5px;
+    left:50%;
+    transform: translateX(-50%);
+    width:0; height:0;
+    border-left:4px solid transparent;
+    border-right:4px solid transparent;
+    border-top:5px solid var(--critical);
+  }
+  .shortfall-banner{
+    display:none;
+    align-items:center;
+    gap:.5rem;
+    background: var(--critical-tint);
+    color: var(--critical);
+    border-radius:8px;
+    padding:.55rem .75rem;
+    font-size:.85rem;
+    font-weight:500;
+  }
+  .shortfall-banner svg{ flex:none; }
+  .storage-warning{
+    display:flex;
+    align-items:flex-start;
+    gap:.6rem;
+    background: var(--critical-tint);
+    color: var(--critical);
+    border-radius:10px;
+    padding:.8rem 1rem;
+    font-size:.85rem;
+    line-height:1.5;
+  }
+  .storage-warning[hidden]{ display:none; }
+  .storage-warning svg{ flex:none; margin-top:.15rem; }
+  .storage-warning strong{ display:block; margin-bottom:.15rem; color: var(--critical); }
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap: .6rem 1.4rem;
+  }
+  .legend-item{ display:flex; align-items:center; gap:.5rem; font-size:.82rem; color: var(--ink-soft); }
+  .legend-sections{ display:contents; }
+  .swatch{ width:10px; height:10px; border-radius:3px; flex:none; }
+  .swatch.savings{ background: var(--good); }
+  .legend-item b{ color: var(--ink); font-family:"IBM Plex Mono",monospace; font-weight:500; font-variant-numeric: tabular-nums; }
+
+  /* ---------- ledger sections ---------- */
+  #sections-container{ display:flex; flex-direction:column; gap:1.75rem; }
+  .ledger{
+    background: var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .ledger-head{
+    padding: 1rem 1.35rem .9rem;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .ledger-title{ font-weight:600; font-size:1.02rem; }
+  .ledger-hint{ width:100%; font-size:.82rem; color: var(--ink-soft); }
+
+  .row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding: .7rem 1.35rem;
+    border-bottom:1px solid var(--line);
+    cursor:text;
+  }
+  .row:last-of-type{ border-bottom:none; }
+  .row[hidden]{ display:none; }
+  .row-label{ font-size:.92rem; color: var(--ink); }
+  .row-label small{ display:block; color: var(--muted); font-size:.76rem; font-weight:400; }
+  .row-right{ display:flex; align-items:baseline; gap:.6rem; flex:none; }
+  .row-monthly{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.8rem;
+    color: var(--ink-soft);
+    white-space:nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .field{
+    display:flex;
+    align-items:center;
+    gap:.15rem;
+    border-bottom:1.5px solid var(--line-strong);
+    padding-bottom:2px;
+  }
+  .field:focus-within{ border-color: var(--accent); }
+  .cur{ font-family:"IBM Plex Mono",monospace; color: var(--muted); font-size:.9rem; }
+  input[type="number"]{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.95rem;
+    font-variant-numeric: tabular-nums;
+    text-align:right;
+    width: 5.4rem;
+    border:none;
+    background:transparent;
+    color: var(--ink);
+    padding:.15rem 0;
+  }
+  input[type="number"]:focus{ outline:none; }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  input[type="number"]{ -moz-appearance:textfield; }
+
+  .subtotal{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding: .8rem 1.35rem;
+    background: var(--surface-2);
+    font-weight:600;
+  }
+  .subtotal .row-monthly{ color: var(--ink); font-size:.85rem; font-weight:500; }
+  .subtotal-value{
+    font-family:"IBM Plex Mono",monospace;
+    font-variant-numeric: tabular-nums;
+    font-size:1.02rem;
+  }
+  .subtotal-pct{ color: var(--muted); font-weight:400; font-size:.82rem; margin-left:.4rem; }
+
+  @media (max-width: 560px){
+    .row{ flex-direction:column; align-items:flex-start; gap:.35rem; }
+    .row-right{ align-self:flex-end; }
+  }
+
+  /* ---------- ledger item rows (every category and entry, uniformly) ---------- */
+  .item-row .row-label-input{
+    flex:1;
+    min-width:0;
+    border:none;
+    border-bottom:1px dashed transparent;
+    background:transparent;
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.92rem;
+    color: var(--ink);
+    padding:.1rem 0;
+  }
+  .item-row .row-label-input:focus{ outline:none; border-bottom-color: var(--line-strong); }
+  .item-row .row-label-input::placeholder{ color: var(--muted); font-style:italic; }
+  .remove-btn{
+    border:none;
+    background:transparent;
+    color: var(--muted);
+    font-size:1.05rem;
+    line-height:1;
+    cursor:pointer;
+    padding:.1rem .4rem;
+    border-radius:6px;
+    flex:none;
+  }
+  .remove-btn:hover{ color: var(--critical); background: var(--critical-tint); }
+  .hide-btn{
+    border:none;
+    background:transparent;
+    color: var(--muted);
+    font-size:1.05rem;
+    line-height:1;
+    cursor:pointer;
+    padding:.1rem .4rem;
+    border-radius:6px;
+    flex:none;
+  }
+  .hide-btn:hover{ color: var(--accent); background: var(--accent-soft); }
+  .add-row-btn{
+    display:flex;
+    align-items:center;
+    gap:.45rem;
+    width:100%;
+    padding:.65rem 1.35rem;
+    border:none;
+    border-top:1px dashed var(--line-strong);
+    background:transparent;
+    color: var(--ink-soft);
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.85rem;
+    font-weight:500;
+    cursor:pointer;
+    text-align:left;
+  }
+  .add-row-btn:hover{ color: var(--accent); background: var(--accent-soft); }
+  .add-row-btn .plus{ font-family:"IBM Plex Mono",monospace; font-weight:600; }
+
+  /* ---------- fully custom category groups ---------- */
+  .ledger-title-input{
+    flex:1;
+    min-width:6rem;
+    font-family:"IBM Plex Sans", sans-serif;
+    font-weight:600;
+    font-size:1.02rem;
+    color: var(--ink);
+    border:none;
+    border-bottom:1px dashed transparent;
+    background:transparent;
+    padding:.1rem 0;
+  }
+  .ledger-title-input:focus{ outline:none; border-bottom-color: var(--line-strong); }
+  .ledger-title-input::placeholder{ color: var(--muted); font-style:italic; font-weight:500; }
+  .section-remove-btn{ font-size:1.15rem; }
+  .confirm-armed{ color:#fff !important; background: var(--critical) !important; }
+  .row-period{
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.78rem;
+    color: var(--ink-soft);
+    background: var(--surface-2);
+    border:1px solid var(--line-strong);
+    border-radius:6px;
+    padding:.2rem .35rem;
+    cursor:pointer;
+    flex:none;
+  }
+  .row-period:focus{ outline:none; border-color: var(--accent); }
+  .add-section-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.5rem;
+    width:100%;
+    padding:.9rem 1.35rem;
+    border:1.5px dashed var(--line-strong);
+    border-radius:14px;
+    background:transparent;
+    color: var(--accent);
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.88rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .add-section-btn:hover{ border-color: var(--accent); background: var(--accent-soft); }
+  .add-section-btn .plus{ font-family:"IBM Plex Mono",monospace; font-weight:600; }
+
+  .removed-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem;
+    padding: .75rem 1.35rem 0;
+  }
+  .removed-chips:empty{ display:none; padding:0; }
+  .chip-restore{
+    display:inline-flex;
+    align-items:center;
+    gap:.3rem;
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.78rem;
+    color: var(--ink-soft);
+    background: var(--surface-2);
+    border:1px dashed var(--line-strong);
+    border-radius:999px;
+    padding:.25rem .65rem .25rem .55rem;
+    cursor:pointer;
+  }
+  .chip-restore:hover{ color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .chip-restore .plus{ font-family:"IBM Plex Mono",monospace; font-weight:600; }
+
+  /* ---------- save card ---------- */
+  .save-card{
+    background: var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:1.25rem 1.35rem 1.35rem;
+    box-shadow: var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:.7rem;
+  }
+  .save-row{ display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  button.save-btn{
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.88rem;
+    font-weight:600;
+    color:#fff;
+    background: var(--accent);
+    border:none;
+    border-radius:8px;
+    padding:.62rem 1.15rem;
+    cursor:pointer;
+    flex:none;
+  }
+  button.save-btn:hover{ filter:brightness(1.08); }
+  button.save-btn:disabled{ opacity:.6; cursor:default; }
+  button.save-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  button.save-btn.secondary{
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .save-status{ font-size:.83rem; color: var(--ink-soft); }
+  .save-status.good{ color: var(--good-ink); }
+  .save-status.critical{ color: var(--critical); }
+  .save-divider{ height:1px; background: var(--line); margin:.2rem 0; }
+
+  /* ---------- footer ---------- */
+  footer{
+    display:flex;
+    flex-direction:column;
+    gap:.6rem;
+    font-size:.82rem;
+    color: var(--ink-soft);
+    padding-top:.5rem;
+    border-top:1px solid var(--line);
+  }
+  footer a{ color: var(--accent); text-decoration:none; }
+  footer a:hover{ text-decoration:underline; }
+  .footer-row{ display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .footer-actions{ display:flex; gap:.5rem; flex-wrap:wrap; }
+  button.reset{
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:.82rem;
+    font-weight:500;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    padding:.45rem .85rem;
+    cursor:pointer;
+  }
+  button.reset:hover{ color: var(--ink); border-color: var(--accent); }
+  button.reset.secondary{ color: var(--accent); border-color: var(--accent-soft); background: var(--accent-soft); }
+  button.reset.secondary:hover{ border-color: var(--accent); }
+  button.reset:focus-visible, .row:focus-within{ outline: 2px solid var(--accent); outline-offset:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bar-seg{ transition:none; }
+  }
+
+  /* ---------- passphrase lock ---------- */
+  .wrap[hidden]{ display:none; }
+  .lock-screen{
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 1.5rem;
+  }
+  .lock-screen[hidden]{ display:none; }
+  .lock-card{
+    width:100%;
+    max-width: 360px;
+    background: var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow: var(--shadow);
+    padding: 1.75rem 1.5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+  }
+  .lock-icon{
+    width:42px; height:42px;
+    border-radius:11px;
+    background: var(--accent);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:1.25rem;
+  }
+  .lock-title{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; margin:.6rem 0 .2rem; }
+  .lock-sub{ color: var(--ink-soft); font-size:.85rem; margin:0; }
+  .lock-field label{ display:block; font-size:.78rem; color: var(--ink-soft); margin-bottom:.3rem; }
+  .lock-field input[type="password"]{
+    width:100%;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.95rem;
+    padding:.55rem .7rem;
+    border:1.5px solid var(--line-strong);
+    border-radius:8px;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .lock-field input[type="password"]:focus{ outline:none; border-color: var(--accent); }
+  .lock-field[hidden]{ display:none; }
+  .lock-error{ font-size:.8rem; color: var(--critical); min-height:1.1em; }
+  .lock-note{ font-size:.74rem; color: var(--muted); line-height:1.5; margin:0; }
+  .lock-forgot{ background:none; border:none; padding:0; font-size:.78rem; color: var(--ink-soft); text-decoration:underline; cursor:pointer; align-self:flex-start; }
+  .lock-forgot[hidden]{ display:none; }
+  .lock-forgot:hover{ color: var(--accent); }
+  .lock-links{ display:flex; flex-wrap:wrap; gap:.25rem 1rem; }
+  .profile-list{ display:flex; flex-direction:column; gap:.5rem; margin:.25rem 0 .25rem; }
+  .profile-btn{
+    width:100%; text-align:left; padding:.65rem .8rem;
+    border:1.5px solid var(--line-strong); border-radius:10px;
+    background: var(--bg); color: var(--ink);
+    font-family:"IBM Plex Sans", sans-serif; font-size:.92rem; font-weight:600;
+    cursor:pointer;
+  }
+  .profile-btn:hover, .profile-btn:focus-visible{ border-color: var(--accent); background: var(--accent-soft); outline:none; }
+  .copy-textarea{
+    width:100%; min-height:9rem; margin-top:.6rem; resize:vertical;
+    font-family:"IBM Plex Mono", monospace; font-size:.78rem; line-height:1.5;
+    padding:.6rem .7rem; border:1.5px solid var(--line-strong); border-radius:8px;
+    background: var(--bg); color: var(--ink);
+  }
+  .copy-textarea:focus{ outline:none; border-color: var(--accent); }
+
+  /* ---------- add-to-home-screen nudge ---------- */
+  .install-hint{
+    display:flex; align-items:flex-start; gap:.7rem;
+    background: var(--accent-soft); color: var(--ink);
+    border:1px solid var(--accent); border-radius:12px;
+    padding:.85rem 1rem; font-size:.86rem; line-height:1.5;
+  }
+  .install-hint[hidden]{ display:none; }
+  .install-hint strong{ display:block; margin-bottom:.15rem; }
+  .install-hint .share-glyph{
+    font-family:"IBM Plex Mono",monospace; font-weight:600; color: var(--accent);
+  }
+  .install-hint button{
+    margin-left:auto; flex:none; align-self:center;
+    border:none; background:transparent; color: var(--ink-soft);
+    font-size:1.1rem; line-height:1; cursor:pointer; padding:.2rem .4rem; border-radius:6px;
+  }
+  .install-hint button:hover{ color: var(--ink); background: var(--surface); }
+</style>
+
+<div class="lock-screen" id="lock-screen" role="dialog" aria-label="Unlock ledger" aria-modal="true">
+  <form class="lock-card" id="lock-form" autocomplete="off">
+    <div class="lock-icon">M</div>
+
+    <div id="lock-picker-panel">
+      <h2 class="lock-title">Whose ledger?</h2>
+      <p class="lock-sub">Each profile's numbers are kept separate and local to this device.</p>
+      <div class="profile-list" id="profile-list"></div>
+      <button type="button" class="add-section-btn" id="profile-add-btn"><span class="plus">+</span> Add a profile</button>
+    </div>
+
+    <div id="lock-auth-panel" hidden>
+      <div>
+        <h2 class="lock-title" id="lock-title">Enter password</h2>
+        <p class="lock-sub" id="lock-sub">This ledger is protected on this device.</p>
+      </div>
+      <div class="lock-field" id="lock-username-field">
+        <label for="lock-username">Username</label>
+        <input type="text" id="lock-username" autocomplete="username">
+      </div>
+      <div class="lock-field">
+        <label for="lock-pass" id="lock-pass-label">Password</label>
+        <input type="password" id="lock-pass" required>
+      </div>
+      <div class="lock-field" id="lock-confirm-field" hidden>
+        <label for="lock-pass-confirm">Confirm password</label>
+        <input type="password" id="lock-pass-confirm">
+      </div>
+      <div class="lock-error" id="lock-error" aria-live="polite"></div>
+      <button type="submit" class="save-btn" id="lock-submit">Unlock</button>
+      <div class="lock-links">
+        <button type="button" class="lock-forgot" id="lock-back-btn" hidden>&larr; Back to profiles</button>
+        <button type="button" class="lock-forgot" id="lock-forgot" hidden>Forgot password? Reset it</button>
+      </div>
+    </div>
+
+    <p class="lock-note">Stored only in this browser, never sent anywhere, and never synced between devices, each profile's numbers stay on the device they were entered on. This is a privacy screen for this device, not account security: anyone with technical access to this page's code could bypass it. Keeping this link private is what actually keeps it safe.</p>
+  </form>
+</div>
+
+<div class="wrap" hidden>
+
+  <div class="install-hint" id="install-hint" hidden>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="flex:none;margin-top:.15rem"><path d="M8 10.5V2M8 2 5 5M8 2l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 9.5v3a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    <span><strong>Add this to your Home Screen.</strong>Tap <span class="share-glyph">Share</span> in Safari, then <span class="share-glyph">Add to Home Screen</span>. Launched from the icon it keeps your figures indefinitely; left as a browser tab, Safari may clear them after a week unused.</span>
+    <button type="button" id="install-hint-dismiss" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <div class="storage-warning" id="storage-warning" hidden role="alert">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 15 14H1L8 1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6.2v3.6M8 11.8v.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    <span><strong>This browser is blocking saved data for this page.</strong>Nothing entered below will still be here after this tab is closed or reloaded. This is a browser privacy setting, not something this page controls, often called "Block all cookies" or blocking site data for this page; allow storage here to keep figures between visits. Profiles are skipped for now since there is nothing to save them into.</span>
+  </div>
+
+  <header>
+    <span class="eyebrow">Household ledger · Berlin</span>
+    <h1>Income Management</h1>
+    <p class="sub">Monthly plan for covering the flat's Kaltmiete and Nebenkosten alone, plus everything else that has to come out of one income.</p>
+    <p class="meta">Starts at zero · nothing is pre-filled · figures stay on this device, never uploaded</p>
+  </header>
+
+  <section class="stat-grid" aria-label="Summary">
+    <div class="stat">
+      <span class="stat-label">Net income</span>
+      <span class="stat-value" id="stat-income">€2.824,40</span>
+      <span class="stat-note">landing in the account</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Planned outflow</span>
+      <span class="stat-value" id="stat-expenses">€1.815,68</span>
+      <span class="stat-note" id="stat-top-pct-note"><span class="dot neutral" id="stat-top-pct-dot"></span><span id="stat-top-pct-text">44,5% to housing</span></span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Leftover</span>
+      <span class="stat-value good" id="stat-leftover">€1.008,72</span>
+      <span class="stat-note" id="stat-leftover-note"><span class="dot good" id="stat-leftover-dot"></span><span id="stat-leftover-text">on track</span></span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Savings rate</span>
+      <span class="stat-value" id="stat-rate">35,7%</span>
+      <span class="stat-note">of net income</span>
+    </div>
+  </section>
+
+  <section class="bar-card" aria-label="Where the income goes">
+    <div class="bar-head">
+      <span class="bar-title" id="bar-title">Where the €2.824,40 goes</span>
+      <span class="bar-title-note" id="bar-note">share of net income</span>
+    </div>
+    <div class="bar-track" id="bar-track">
+      <div class="bar-segments" id="bar-segments"></div>
+      <div class="bar-seg savings" id="seg-savings" style="width:0%"></div>
+      <div class="income-marker" id="income-marker" title="Income ends here"></div>
+    </div>
+    <div class="shortfall-banner" id="shortfall-banner">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 15 14H1L8 1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6.2v3.6M8 11.8v.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <span id="shortfall-text">Short by €0.00/month</span>
+    </div>
+    <div class="legend">
+      <span class="legend-sections" id="legend-sections"></span>
+      <span class="legend-item"><span class="swatch savings"></span>Savings <b id="legend-savings">€0,00 · 0,0%</b></span>
+    </div>
+  </section>
+
+  <section class="ledger" aria-label="Income">
+    <div class="ledger-head">
+      <span class="ledger-title">Income</span>
+    </div>
+    <label class="row">
+      <span class="row-label">Net income<small>Bank Transfer, after all deductions</small></span>
+      <span class="row-right"><span class="field"><span class="cur">€</span><input type="number" step="0.01" min="0" value="0" data-key="income" aria-label="Net income"></span></span>
+    </label>
+  </section>
+
+  <div id="sections-container"></div>
+
+  <button type="button" class="add-section-btn" id="add-section-btn"><span class="plus">+</span> Add category group</button>
+
+  <section class="save-card" aria-label="Export and import">
+    <div class="bar-head">
+      <span class="bar-title">Export to Excel</span>
+      <span class="bar-title-note">saved straight to this device, nothing leaves your browser</span>
+    </div>
+    <p class="ledger-hint">Add any expenses that are missing above, then export. The file is built in your browser and handed to your device; it is never sent anywhere else.</p>
+    <div class="save-row">
+      <button class="save-btn" id="export-btn" type="button">Export to Excel</button>
+      <span class="save-status" id="export-status">Not exported yet this session.</span>
+    </div>
+    <div id="copy-fallback" hidden>
+      <p class="ledger-hint">This view can't hand a file to the device directly. Copy the figures as plain text instead, then paste them into Notes, an email, or a spreadsheet (columns are tab-separated, so pasting into a spreadsheet splits them automatically).</p>
+      <div class="save-row">
+        <button class="save-btn secondary" id="copy-text-btn" type="button">Copy figures as text</button>
+        <span class="save-status" id="copy-text-status">Not copied yet.</span>
+      </div>
+      <textarea id="copy-text-area" class="copy-textarea" readonly hidden aria-label="Figures as text, select all and copy"></textarea>
+    </div>
+    <div class="save-divider"></div>
+    <p class="ledger-hint">Already have an export from this ledger? Load it back in: its values, custom lines, and removed or hidden items all come with it.</p>
+    <div class="save-row">
+      <button class="save-btn secondary" id="import-btn" type="button">Import from Excel</button>
+      <span class="save-status" id="import-status">No file imported yet.</span>
+      <input type="file" id="import-file" accept=".xlsx" hidden>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-row">
+      <span>All figures editable above · kept in this browser's storage, never in the page itself · <span class="save-status" id="persist-status">not saved yet</span></span>
+      <span class="footer-actions">
+        <button class="reset secondary" id="lock-now-btn" type="button">Switch profile</button>
+        <button class="reset" id="reset-btn" type="button">Clear all values</button>
+      </span>
+    </div>
+    <span>Regular-living benchmarks: <a href="https://allaboutberlin.com/guides/cost-of-living" target="_blank" rel="noopener">All About Berlin, cost of living</a> · cross-check: <a href="https://wise.com/us/cost-of-living/germany/berlin" target="_blank" rel="noopener">Wise, Berlin cost of living</a>.</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  /* ---------- storage keys ---------- */
+  var STORAGE_KEY = "income-management-ledger-v4";
+  var LEGACY_V3_STORAGE_KEY = "income-management-ledger-v3";
+  var LEGACY_STORAGE_KEY = "marvin-budget-ledger-v2";
+  var LOCK_HASH_KEY = "income-management-lock-hash-v1";
+  var LEGACY_LOCK_HASH_KEY = "marvin-budget-ledger-lock-hash-v1";
+  var USER_REGISTRY_KEY = "income-management-profiles-v1";
+  var CURRENT_PROFILE_SESSION_KEY = "income-management-current-profile-v1";
+  // Sentinel for whoever already had a single-passphrase ledger before profiles
+  // existed: their existing data and hash carry forward under this key so
+  // nothing is lost or reset by the upgrade. Real usernames always normalize
+  // to a "p:"-prefixed key (see normalizeUsername), so this can never collide.
+  var LEGACY_PROFILE_KEY = "legacy";
+
+  // Fully custom "category groups" (formerly three fixed, unrenameable
+  // sections). Anyone can add, rename, or delete a group; each holds any
+  // number of items, and every item can be renamed, set to monthly or
+  // yearly, hidden from the total, or deleted.
+  var SEED_SECTIONS = [
+    {
+      key: "housing", title: "Fixed housing", annual: false,
+      hint: "Kaltmiete and Nebenkosten are apartment-wide; the rest are individual contracts. Every line can be renamed, set to monthly or yearly, hidden from the total, or deleted, and the whole group can be too.",
+      labels: ["Kaltmiete", "Nebenkosten", "Strom (electricity)", "Internet", "Rundfunk (broadcast fee)", "Hausrat (contents insurance)"]
+    },
+    {
+      key: "regular", title: "Regular living", annual: false,
+      hint: "Food and the recurring day-to-day costs on top of the flat. Benchmarks below, adjust to actual spending.",
+      labels: ["Groceries & food", "Transport (Deutschlandticket)", "Mobile phone", "Liability insurance (Haftpflicht)"]
+    },
+    {
+      key: "irregular", title: "Irregular, averaged monthly", annual: true,
+      hint: "Set to yearly and spread evenly, so the monthly average can be set aside before the real bill lands.",
+      labels: ["Clothing", "Vacation", "Other (gifts, repairs, electronics)"]
+    }
+  ];
+
+  // Pre-unification schema (fixed keys + a separate "extra" list) -> label
+  // and section, used only to migrate a very old saved ledger once.
+  var LEGACY_KEY_INFO = {
+    kaltmiete: { section: "housing", label: "Kaltmiete" },
+    nebenkosten: { section: "housing", label: "Nebenkosten" },
+    strom: { section: "housing", label: "Strom (electricity)" },
+    internet: { section: "housing", label: "Internet" },
+    rundfunk: { section: "housing", label: "Rundfunk (broadcast fee)" },
+    hausrat: { section: "housing", label: "Hausrat (contents insurance)" },
+    food: { section: "regular", label: "Groceries & food" },
+    transport: { section: "regular", label: "Transport (Deutschlandticket)" },
+    mobile: { section: "regular", label: "Mobile phone" },
+    liability: { section: "regular", label: "Liability insurance (Haftpflicht)" },
+    clothing: { section: "irregular", label: "Clothing" },
+    vacation: { section: "irregular", label: "Vacation" },
+    other: { section: "irregular", label: "Other (gifts, repairs, electronics)" }
+  };
+
+  function uid(){ return "x" + Math.random().toString(36).slice(2, 9); }
+  function eur(n){
+    if (!isFinite(n)) n = 0;
+    return new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", minimumFractionDigits:2, maximumFractionDigits:2 }).format(n);
+  }
+  function pct(n){
+    if (!isFinite(n)) n = 0;
+    return n.toLocaleString("de-DE", { minimumFractionDigits:1, maximumFractionDigits:1 }) + "%";
+  }
+  function clampPct(n){ return Math.max(0, Math.min(100, n)); }
+  function escapeHtml(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function seedSection(def){
+    return {
+      id: uid(),
+      title: def.title,
+      hint: def.hint || "",
+      items: def.labels.map(function(label){
+        return { id: uid(), label: label, amount: 0, excluded: false, annual: !!def.annual };
+      })
+    };
+  }
+  function seedAll(){
+    return SEED_SECTIONS.map(seedSection);
+  }
+  function sectionsFromFixedShape(fixedShape){
+    return SEED_SECTIONS.map(function(def){
+      var items = (fixedShape && Array.isArray(fixedShape[def.key])) ? fixedShape[def.key] : [];
+      return {
+        id: uid(),
+        title: def.title,
+        hint: def.hint || "",
+        items: items.map(function(it){
+          return {
+            id: it.id || uid(), label: it.label || "",
+            amount: parseFloat(it.amount) || 0, excluded: !!it.excluded,
+            annual: !!def.annual
+          };
+        })
+      };
+    });
+  }
+  function sanitizeSections(sections){
+    if (!Array.isArray(sections)) return seedAll();
+    return sections.map(function(sec){
+      return {
+        id: sec.id || uid(),
+        title: typeof sec.title === "string" ? sec.title : "",
+        hint: typeof sec.hint === "string" ? sec.hint : "",
+        items: Array.isArray(sec.items) ? sec.items.map(function(it){
+          return {
+            id: it.id || uid(),
+            label: typeof it.label === "string" ? it.label : "",
+            amount: parseFloat(it.amount) || 0,
+            excluded: !!it.excluded,
+            annual: !!it.annual
+          };
+        }) : []
+      };
+    });
+  }
+
+  var incomeInput = document.querySelector('input[data-key="income"]');
+  var state = seedAll(); // array of {id,title,hint,items:[{id,label,amount,excluded,annual}]}
+
+  function findSection(sectionId){
+    return state.find(function(s){ return s.id === sectionId; });
+  }
+  function findItem(sectionId, itemId){
+    var section = findSection(sectionId);
+    if (!section) return null;
+    return section.items.find(function(it){ return it.id === itemId; }) || null;
+  }
+  function monthlyEquivalent(item){
+    var amt = parseFloat(item.amount) || 0;
+    return item.annual ? amt / 12 : amt;
+  }
+  function sectionMonthlyTotal(section){
+    return section.items.reduce(function(acc, item){
+      if (item.excluded) return acc;
+      return acc + monthlyEquivalent(item);
+    }, 0);
+  }
+  function readIncome(){
+    var n = parseFloat(incomeInput.value);
+    return isFinite(n) && n >= 0 ? n : 0;
+  }
+
+  /* ---------- persistence ----------
+     Every profile's ledger lives under its own key so different people's
+     numbers on the same device never mix. The one exception is the
+     "legacy" profile (see LEGACY_PROFILE_KEY above): it keeps using the
+     original un-suffixed STORAGE_KEY so anyone who already had data there
+     from before profiles existed keeps it without a copy step. */
+  var activeProfileKey = null;
+  function ledgerKeyFor(profileKey){
+    return profileKey === LEGACY_PROFILE_KEY ? STORAGE_KEY : (STORAGE_KEY + "::" + profileKey);
+  }
+  var persistStatusEl = document.getElementById("persist-status");
+  function twoDigits(n){ return (n < 10 ? "0" : "") + n; }
+  function setPersistStatus(ok){
+    if (!persistStatusEl) return;
+    if (ok){
+      var t = new Date();
+      persistStatusEl.textContent = "saved to this browser at " + twoDigits(t.getHours()) + ":" + twoDigits(t.getMinutes());
+      persistStatusEl.classList.remove("critical");
+    } else {
+      persistStatusEl.textContent = "could not save just now, see notice above";
+      persistStatusEl.classList.add("critical");
+      var warningNow = document.getElementById("storage-warning");
+      if (warningNow) warningNow.hidden = false;
+    }
+  }
+  function saveState(){
+    if (!activeProfileKey) return;
+    try {
+      localStorage.setItem(ledgerKeyFor(activeProfileKey), JSON.stringify({ income: readIncome(), sections: state }));
+      setPersistStatus(true);
+    } catch (e) { setPersistStatus(false); }
+  }
+  function loadState(){
+    if (!activeProfileKey) return null;
+    try {
+      var raw = localStorage.getItem(ledgerKeyFor(activeProfileKey));
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.sections)) return null;
+      return { income: parsed.income, sections: sanitizeSections(parsed.sections) };
+    } catch (e) { return null; }
+  }
+  function migrateFromV3(){
+    try {
+      var raw = localStorage.getItem(LEGACY_V3_STORAGE_KEY);
+      if (!raw) return null;
+      var old = JSON.parse(raw);
+      if (!old || typeof old !== "object") return null;
+      var migrated = { income: parseFloat(old.income) || 0, sections: sectionsFromFixedShape(old.sections || {}) };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        localStorage.removeItem(LEGACY_V3_STORAGE_KEY);
+      } catch (e) {}
+      return migrated;
+    } catch (e) { return null; }
+  }
+  function migrateFromV2(){
+    try {
+      var raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (!raw) return null;
+      var old = JSON.parse(raw);
+      if (!old || typeof old !== "object") return null;
+      var fixedShape = { housing: [], regular: [], irregular: [] };
+      var oldValues = old.values || {};
+      var oldRemoved = Array.isArray(old.removed) ? old.removed : [];
+      Object.keys(LEGACY_KEY_INFO).forEach(function(key){
+        var info = LEGACY_KEY_INFO[key];
+        var amount = parseFloat(oldValues[key]) || 0;
+        fixedShape[info.section].push({
+          id: uid(), label: info.label, amount: amount,
+          excluded: oldRemoved.indexOf(key) !== -1
+        });
+      });
+      ["housing", "regular", "irregular"].forEach(function(section){
+        var extras = (old.extra && Array.isArray(old.extra[section])) ? old.extra[section] : [];
+        extras.forEach(function(item){
+          fixedShape[section].push({
+            id: item.id || uid(),
+            label: item.label || "",
+            amount: parseFloat(item.amount) || 0,
+            excluded: !!item.excluded
+          });
+        });
+      });
+      var income = parseFloat(oldValues.income) || 0;
+      var migrated = { income: income, sections: sectionsFromFixedShape(fixedShape) };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+      } catch (e) {}
+      return migrated;
+    } catch (e) { return null; }
+  }
+  function migrateLegacyState(){
+    // v2/v3 ledger data only ever existed under the old un-namespaced keys,
+    // from before per-profile storage existed, so only the legacy profile
+    // (see LEGACY_PROFILE_KEY) can have anything to migrate here.
+    if (activeProfileKey !== LEGACY_PROFILE_KEY) return null;
+    return migrateFromV3() || migrateFromV2();
+  }
+  function migrateLegacyLockHash(){
+    try {
+      var oldHash = localStorage.getItem(LEGACY_LOCK_HASH_KEY);
+      if (oldHash && !localStorage.getItem(LOCK_HASH_KEY)){
+        localStorage.setItem(LOCK_HASH_KEY, oldHash);
+        localStorage.removeItem(LEGACY_LOCK_HASH_KEY);
+      }
+    } catch (e) {}
+  }
+
+  /* ---------- rendering ---------- */
+  var SERIES_SLOTS = 8; // fixed categorical color slots (validated palette); a 9th+ group folds into "Other"
+  function seriesColor(index){
+    return index < SERIES_SLOTS ? ("var(--series-" + (index + 1) + ")") : "var(--muted)";
+  }
+
+  function itemRowHtml(item){
+    return (
+      '<div class="row item-row"' + (item.excluded ? ' hidden' : '') + ' data-id="' + item.id + '">' +
+        '<input type="text" class="row-label-input" data-role="label" placeholder="Category name" value="' + escapeHtml(item.label) + '" aria-label="Category name">' +
+        '<span class="row-right">' +
+          (item.annual ? '<span class="row-monthly" data-role="monthly">→ ' + eur(monthlyEquivalent(item)) + '/mo</span>' : '') +
+          '<span class="field"><span class="cur">€</span><input type="number" class="row-amount" data-role="amount" step="' + (item.annual ? 10 : 1) + '" min="0" value="' + item.amount + '" aria-label="Category amount"></span>' +
+          '<select class="row-period" data-role="period" aria-label="Monthly or yearly value">' +
+            '<option value="monthly"' + (item.annual ? '' : ' selected') + '>/month</option>' +
+            '<option value="yearly"' + (item.annual ? ' selected' : '') + '>/year</option>' +
+          '</select>' +
+          '<button type="button" class="hide-btn" aria-label="Hide this category from the total">−</button>' +
+          '<button type="button" class="remove-btn" aria-label="Delete this category">×</button>' +
+        '</span>' +
+      '</div>'
+    );
+  }
+
+  function sectionTemplate(section){
+    var hintHtml = section.hint ? '<span class="ledger-hint">' + escapeHtml(section.hint) + '</span>' : '';
+    return (
+      '<section class="ledger" data-section-id="' + section.id + '" aria-label="' + escapeHtml(section.title || "Untitled category group") + '">' +
+        '<div class="ledger-head">' +
+          '<input type="text" class="ledger-title-input" data-role="section-title" value="' + escapeHtml(section.title) + '" placeholder="Category group name" aria-label="Category group name">' +
+          '<button type="button" class="remove-btn section-remove-btn" aria-label="Delete this category group" title="Delete this category group">×</button>' +
+          hintHtml +
+        '</div>' +
+        '<div class="row-list" data-role="items"></div>' +
+        '<div class="removed-chips" data-role="removed"></div>' +
+        '<button type="button" class="add-row-btn" data-role="add-item"><span class="plus">+</span> Add category</button>' +
+        '<div class="subtotal">' +
+          '<span>Subtotal</span>' +
+          '<span class="subtotal-value" data-role="subtotal"></span>' +
+        '</div>' +
+      '</section>'
+    );
+  }
+
+  function renderSectionItems(sectionId){
+    var section = findSection(sectionId);
+    var root = document.querySelector('.ledger[data-section-id="' + sectionId + '"]');
+    if (!section || !root) return;
+    var itemsEl = root.querySelector('[data-role="items"]');
+    var removedEl = root.querySelector('[data-role="removed"]');
+    itemsEl.innerHTML = section.items.map(itemRowHtml).join("");
+    var hidden = section.items.filter(function(item){ return item.excluded; });
+    removedEl.innerHTML = hidden.map(function(item){
+      return '<button type="button" class="chip-restore" data-id="' + item.id + '" data-section="' + sectionId + '"><span class="plus">+</span> ' + escapeHtml(item.label || "Untitled category") + '</button>';
+    }).join("");
+  }
+  function renderAllItems(){
+    state.forEach(function(section){ renderSectionItems(section.id); });
+  }
+  function renderBarShell(){
+    var segEl = document.getElementById("bar-segments");
+    var legendEl = document.getElementById("legend-sections");
+    if (!segEl || !legendEl) return;
+    segEl.innerHTML = state.map(function(section, idx){
+      return '<div class="bar-seg" data-section-id="' + section.id + '" style="width:0%;background-color:' + seriesColor(idx) + '"></div>';
+    }).join("");
+    legendEl.innerHTML = state.map(function(section, idx){
+      return '<span class="legend-item" data-section-id="' + section.id + '"><span class="swatch" style="background-color:' + seriesColor(idx) + '"></span><span data-role="legend-title">' + escapeHtml(section.title || "Untitled category group") + '</span> <b data-role="legend-value">€0,00 · 0,0%</b></span>';
+    }).join("");
+  }
+  function renderSections(){
+    var container = document.getElementById("sections-container");
+    container.innerHTML = state.map(sectionTemplate).join("");
+    renderAllItems();
+    renderBarShell();
+  }
+
+  function addItem(sectionId){
+    var section = findSection(sectionId);
+    if (!section) return;
+    var item = { id: uid(), label: "", amount: 0, excluded: false, annual: false };
+    section.items.push(item);
+    renderSectionItems(sectionId);
+    recalc();
+    var input = document.querySelector('.ledger[data-section-id="' + sectionId + '"] [data-id="' + item.id + '"] .row-label-input');
+    if (input) input.focus();
+  }
+  function hideItem(sectionId, itemId){
+    var item = findItem(sectionId, itemId);
+    if (!item) return;
+    item.excluded = true;
+    renderSectionItems(sectionId);
+    recalc();
+  }
+  function restoreItem(sectionId, itemId){
+    var item = findItem(sectionId, itemId);
+    if (!item) return;
+    item.excluded = false;
+    renderSectionItems(sectionId);
+    recalc();
+  }
+  function deleteItem(sectionId, itemId){
+    var section = findSection(sectionId);
+    if (!section) return;
+    section.items = section.items.filter(function(x){ return x.id !== itemId; });
+    renderSectionItems(sectionId);
+    recalc();
+  }
+
+  function addSection(){
+    var section = { id: uid(), title: "", hint: "", items: [] };
+    state.push(section);
+    renderSections();
+    recalc();
+    var input = document.querySelector('.ledger[data-section-id="' + section.id + '"] .ledger-title-input');
+    if (input) input.focus();
+  }
+  function removeSection(sectionId){
+    state = state.filter(function(s){ return s.id !== sectionId; });
+    renderSections();
+    recalc();
+  }
+
+  var sectionsContainer = document.getElementById("sections-container");
+  var sectionRemoveArmedId = null;
+  var sectionRemoveArmedTimer = null;
+  function armSectionRemove(sectionId, btn){
+    sectionRemoveArmedId = sectionId;
+    btn.classList.add("confirm-armed");
+    btn.title = "Click again to delete this category group";
+    btn.setAttribute("aria-label", "Click again to delete this category group");
+    clearTimeout(sectionRemoveArmedTimer);
+    sectionRemoveArmedTimer = setTimeout(function(){
+      sectionRemoveArmedId = null;
+      btn.classList.remove("confirm-armed");
+      btn.title = "Delete this category group";
+      btn.setAttribute("aria-label", "Delete this category group");
+    }, 4000);
+  }
+
+  sectionsContainer.addEventListener("input", function(e){
+    var sectionEl = e.target.closest(".ledger[data-section-id]");
+    if (!sectionEl) return;
+    var sectionId = sectionEl.dataset.sectionId;
+
+    if (e.target.dataset.role === "section-title"){
+      var section = findSection(sectionId);
+      if (section){
+        section.title = e.target.value;
+        var legendTitleEl = document.querySelector('.legend-item[data-section-id="' + sectionId + '"] [data-role="legend-title"]');
+        if (legendTitleEl) legendTitleEl.textContent = section.title || "Untitled category group";
+        recalc();
+      }
+      return;
+    }
+
+    var row = e.target.closest(".item-row");
+    if (!row) return;
+    var item = findItem(sectionId, row.dataset.id);
+    if (!item) return;
+    if (e.target.dataset.role === "label") item.label = e.target.value;
+    if (e.target.dataset.role === "amount"){
+      item.amount = parseFloat(e.target.value) || 0;
+      var monthlyEl = row.querySelector('[data-role="monthly"]');
+      if (monthlyEl) monthlyEl.textContent = "→ " + eur(monthlyEquivalent(item)) + "/mo";
+    }
+    recalc();
+  });
+
+  sectionsContainer.addEventListener("change", function(e){
+    if (e.target.dataset.role !== "period") return;
+    var sectionEl = e.target.closest(".ledger[data-section-id]");
+    if (!sectionEl) return;
+    var sectionId = sectionEl.dataset.sectionId;
+    var row = e.target.closest(".item-row");
+    if (!row) return;
+    var item = findItem(sectionId, row.dataset.id);
+    if (!item) return;
+    item.annual = (e.target.value === "yearly");
+    renderSectionItems(sectionId);
+    recalc();
+  });
+
+  sectionsContainer.addEventListener("click", function(e){
+    var sectionEl = e.target.closest(".ledger[data-section-id]");
+    if (!sectionEl) return;
+    var sectionId = sectionEl.dataset.sectionId;
+
+    if (e.target.classList.contains("section-remove-btn")){
+      if (sectionRemoveArmedId === sectionId){
+        clearTimeout(sectionRemoveArmedTimer);
+        sectionRemoveArmedId = null;
+        removeSection(sectionId);
+      } else {
+        armSectionRemove(sectionId, e.target);
+      }
+      return;
+    }
+    if (e.target.dataset.role === "add-item"){ addItem(sectionId); return; }
+
+    var chip = e.target.closest(".chip-restore");
+    if (chip){ restoreItem(chip.dataset.section, chip.dataset.id); return; }
+
+    var row = e.target.closest(".item-row");
+    if (!row) return;
+    if (e.target.classList.contains("hide-btn")){ hideItem(sectionId, row.dataset.id); return; }
+    if (e.target.classList.contains("remove-btn")){ deleteItem(sectionId, row.dataset.id); }
+  });
+
+  var addSectionBtn = document.getElementById("add-section-btn");
+  if (addSectionBtn) addSectionBtn.addEventListener("click", addSection);
+
+  /* ---------- totals ---------- */
+  function computeTotals(income){
+    var sectionTotals = state.map(function(section){
+      return { id: section.id, title: section.title, monthlyTotal: sectionMonthlyTotal(section) };
+    });
+    var totalExpenses = sectionTotals.reduce(function(acc, s){ return acc + s.monthlyTotal; }, 0);
+    var leftover = income - totalExpenses;
+    var savingsRate = income > 0 ? (leftover / income) * 100 : 0;
+    var topSection = sectionTotals.reduce(function(best, s){
+      return (!best || s.monthlyTotal > best.monthlyTotal) ? s : best;
+    }, null);
+    var topPct = (income > 0 && topSection && topSection.monthlyTotal > 0) ? (topSection.monthlyTotal / income) * 100 : 0;
+    return {
+      income: income, sectionTotals: sectionTotals, totalExpenses: totalExpenses,
+      leftover: leftover, savingsRate: savingsRate, topSection: topSection, topPct: topPct
+    };
+  }
+
+  var els = {
+    statIncome: document.getElementById("stat-income"),
+    statExpenses: document.getElementById("stat-expenses"),
+    statTopPctText: document.getElementById("stat-top-pct-text"),
+    statTopPctDot: document.getElementById("stat-top-pct-dot"),
+    statLeftover: document.getElementById("stat-leftover"),
+    statLeftoverText: document.getElementById("stat-leftover-text"),
+    statLeftoverDot: document.getElementById("stat-leftover-dot"),
+    statRate: document.getElementById("stat-rate"),
+    segSavings: document.getElementById("seg-savings"),
+    barTitle: document.getElementById("bar-title"),
+    incomeMarker: document.getElementById("income-marker"),
+    shortfallBanner: document.getElementById("shortfall-banner"),
+    shortfallText: document.getElementById("shortfall-text"),
+    barNote: document.getElementById("bar-note"),
+    legendSavings: document.getElementById("legend-savings")
+  };
+
+  function updateSectionSubtotals(t){
+    t.sectionTotals.forEach(function(s){
+      var root = document.querySelector('.ledger[data-section-id="' + s.id + '"]');
+      if (!root) return;
+      var subEl = root.querySelector('[data-role="subtotal"]');
+      if (!subEl) return;
+      var pctVal = t.income > 0 ? (s.monthlyTotal / t.income * 100) : 0;
+      subEl.innerHTML = eur(s.monthlyTotal) + '<span class="subtotal-pct">' + pct(pctVal) + ' of income</span>';
+    });
+  }
+
+  function updateBarValues(t){
+    var overBudget = t.leftover < 0;
+    var denom = overBudget ? (t.totalExpenses || 1) : (t.income || 1);
+    // Each category segment is a child of #bar-segments, a box that itself
+    // is sized (via flex:1) to only the "total expenses" share of the full
+    // track, not the whole track, so a segment's own width has to be a
+    // share of totalExpenses, not of income, or it renders far too narrow
+    // with a stray gap eating the rest of its own box.
+    var expenseDenom = t.totalExpenses || 1;
+
+    t.sectionTotals.forEach(function(s){
+      var w = clampPct(s.monthlyTotal / expenseDenom * 100);
+      var segNode = document.querySelector('#bar-segments [data-section-id="' + s.id + '"]');
+      if (segNode) segNode.style.width = w + "%";
+      var legendValueNode = document.querySelector('.legend-item[data-section-id="' + s.id + '"] [data-role="legend-value"]');
+      if (legendValueNode){
+        var pctVal = t.income > 0 ? (s.monthlyTotal / t.income * 100) : 0;
+        legendValueNode.textContent = eur(s.monthlyTotal) + " · " + pct(pctVal);
+      }
+    });
+
+    var wSavings = overBudget ? 0 : clampPct(t.leftover/denom*100);
+    els.segSavings.style.width = wSavings + "%";
+    els.legendSavings.textContent = eur(Math.max(t.leftover,0)) + " · " + pct(Math.max(t.savingsRate,0));
+
+    if (overBudget){
+      els.incomeMarker.style.display = "block";
+      els.incomeMarker.style.left = clampPct(t.income/denom*100) + "%";
+      els.shortfallBanner.style.display = "flex";
+      els.shortfallText.textContent = "Short by " + eur(Math.abs(t.leftover)) + "/month. Income covers " + pct(clampPct(t.income/denom*100)) + " of planned spending";
+      els.barNote.textContent = "share of planned outflow";
+    } else {
+      els.incomeMarker.style.display = "none";
+      els.shortfallBanner.style.display = "none";
+      els.barNote.textContent = "share of net income";
+    }
+  }
+
+  function recalc(){
+    var income = readIncome();
+    var t = computeTotals(income);
+
+    els.statIncome.textContent = eur(income);
+    els.statExpenses.textContent = eur(t.totalExpenses);
+    els.statTopPctText.textContent = (t.topSection && t.topSection.monthlyTotal > 0)
+      ? (pct(t.topPct) + " to " + (t.topSection.title || "untitled group"))
+      : "no categories yet";
+    els.statTopPctDot.className = "dot " + (t.topPct > 40 ? "critical" : "good");
+
+    els.statLeftover.textContent = eur(t.leftover);
+    els.statLeftover.className = "stat-value " + (t.leftover >= 0 ? "good" : "critical");
+    els.statLeftoverDot.className = "dot " + (t.leftover >= 0 ? "good" : "critical");
+    els.statLeftoverText.textContent = t.leftover >= 0 ? "on track" : "over budget";
+    els.statRate.textContent = pct(t.savingsRate);
+    els.statRate.className = "stat-value" + (t.savingsRate < 0 ? " critical" : "");
+    els.barTitle.textContent = "Where the " + eur(income) + " goes";
+
+    updateSectionSubtotals(t);
+    updateBarValues(t);
+
+    saveState();
+  }
+
+  incomeInput.addEventListener("input", recalc);
+
+  var resetBtn = document.getElementById("reset-btn");
+  var resetConfirmArmed = false;
+  var resetConfirmTimer = null;
+  var resetBtnDefaultLabel = resetBtn.textContent;
+  resetBtn.addEventListener("click", function(){
+    if (!resetConfirmArmed){
+      resetConfirmArmed = true;
+      resetBtn.textContent = "Click again to erase everything";
+      resetConfirmTimer = setTimeout(function(){
+        resetConfirmArmed = false;
+        resetBtn.textContent = resetBtnDefaultLabel;
+      }, 4000);
+      return;
+    }
+    clearTimeout(resetConfirmTimer);
+    resetConfirmArmed = false;
+    resetBtn.textContent = resetBtnDefaultLabel;
+    if (activeProfileKey){ try { localStorage.removeItem(ledgerKeyFor(activeProfileKey)); } catch(e) {} }
+    incomeInput.value = 0;
+    state = seedAll();
+    renderSections();
+    recalc();
+  });
+
+  function buildSnapshot(){
+    var income = readIncome();
+    var t = computeTotals(income);
+    return {
+      savedAt: new Date().toISOString(),
+      income: income,
+      sections: state,
+      totals: {
+        sectionTotals: t.sectionTotals, totalExpenses: t.totalExpenses,
+        leftover: t.leftover, savingsRate: t.savingsRate
+      }
+    };
+  }
+
+  function setExportStatus(text, kind){
+    var status = document.getElementById("export-status");
+    status.textContent = text;
+    status.className = "save-status" + (kind ? " " + kind : "");
+  }
+
+  /* ---------- hand the finished workbook to the device ----------
+     First-party page, so an ordinary object-URL download works: on iOS it
+     lands in Files (or opens the share sheet), on desktop in Downloads. The
+     object URL is revoked on the next tick, after the click has been taken. */
+  function saveBlobToDevice(blob, filename){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 2000);
+  }
+
+  /* ---------- plain-text fallback ----------
+     "Export to Excel" depends on this view offering the platform's
+     downloads capability, which not every place this page can be opened
+     provides. Rather than a dead end, always leave a way to get the
+     figures out: a tab-separated plain-text copy that needs nothing but
+     the clipboard (or, failing that, a selectable text box). */
+  function buildFiguresText(){
+    var snapshot = buildSnapshot();
+    var lines = [];
+    var stamp = new Date().toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    lines.push("Income Management, saved " + stamp + ".");
+    lines.push("");
+    lines.push("Net income\t" + eur(snapshot.income || 0));
+    var sections = Array.isArray(snapshot.sections) ? snapshot.sections : [];
+    sections.forEach(function(section){
+      lines.push("");
+      lines.push("[" + (section.title || "Untitled category group") + "]");
+      lines.push("Category\tAmount\tPeriod\tMonthly equivalent\tStatus");
+      (section.items || []).forEach(function(item){
+        var isAnnual = !!item.annual;
+        var monthly = isAnnual ? (item.amount || 0) / 12 : (item.amount || 0);
+        lines.push(
+          (item.label || "Untitled category") + "\t" +
+          eur(item.amount || 0) + "\t" +
+          (isAnnual ? "Yearly" : "Monthly") + "\t" +
+          eur(monthly) + "\t" +
+          (item.excluded ? "Removed" : "")
+        );
+      });
+    });
+    lines.push("");
+    lines.push("[Summary]");
+    var totals = snapshot.totals || {};
+    (totals.sectionTotals || []).forEach(function(s){
+      lines.push((s.title || "Untitled category group") + "\t" + eur(s.monthlyTotal || 0));
+    });
+    lines.push("Total planned expenses\t" + eur(totals.totalExpenses || 0));
+    lines.push("Leftover\t" + eur(totals.leftover || 0));
+    lines.push("Savings rate\t" + pct(totals.savingsRate || 0));
+    return lines.join("\n");
+  }
+
+  var copyFallback = document.getElementById("copy-fallback");
+  var copyTextBtn = document.getElementById("copy-text-btn");
+  var copyTextArea = document.getElementById("copy-text-area");
+  function setCopyStatus(text, kind){
+    var status = document.getElementById("copy-text-status");
+    status.textContent = text;
+    status.className = "save-status" + (kind ? " " + kind : "");
+  }
+  function showCopyFallback(){
+    if (copyFallback) copyFallback.hidden = false;
+  }
+  if (copyTextBtn) copyTextBtn.addEventListener("click", function(){
+    var text = buildFiguresText();
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyTextArea.hidden = true;
+        setCopyStatus("Copied to the clipboard.", "good");
+      }).catch(function(){ revealTextArea(text); });
+    } else {
+      revealTextArea(text);
+    }
+    function revealTextArea(t){
+      copyTextArea.value = t;
+      copyTextArea.hidden = false;
+      copyTextArea.focus();
+      copyTextArea.select();
+      setCopyStatus("Couldn't copy automatically: the text below is selected, copy it with Ctrl/Cmd+C.", "");
+    }
+  });
+
+  var XLSX_CUR = '#,##0.00" €"';
+  var XLSX_PCT = "0.0%";
+
+  function buildLedgerWorkbook(snapshot, savedDisplay){
+    var ws = {};
+
+    function cell(r, c, value, opts){
+      opts = opts || {};
+      var ref = XLSX.utils.encode_cell({ r: r - 1, c: c - 1 });
+      var out = {};
+      if (opts.formula){
+        out.f = opts.formula;
+        out.t = "n";
+        out.v = (value === undefined || value === null) ? 0 : value;
+      } else if (typeof value === "number"){
+        out.t = "n";
+        out.v = value;
+      } else {
+        out.t = "s";
+        out.v = value == null ? "" : String(value);
+      }
+      if (opts.z) out.z = opts.z;
+      ws[ref] = out;
+      return out;
+    }
+
+    function sectionHeader(r, title, cols){
+      cell(r, 1, title);
+      r += 1;
+      for (var i = 0; i < cols.length; i++) cell(r, i + 1, cols[i]);
+      return r + 1;
+    }
+
+    function writeCategorySection(r, title, items){
+      r = sectionHeader(r, title, ["Category", "Amount (€)", "Period", "Monthly equiv (€)", "Status"]);
+      var start = r;
+      items.forEach(function(item){
+        var isAnnual = !!item.annual;
+        cell(r, 1, item.label || "Untitled category");
+        cell(r, 2, item.amount || 0, { z: XLSX_CUR });
+        cell(r, 3, isAnnual ? "Yearly" : "Monthly");
+        var monthlyVal = isAnnual ? (item.amount || 0) / 12 : (item.amount || 0);
+        cell(r, 4, monthlyVal, { formula: 'IF(C' + r + '="Yearly",B' + r + '/12,B' + r + ')', z: XLSX_CUR });
+        cell(r, 5, item.excluded ? "Removed" : "");
+        r += 1;
+      });
+      var end = Math.max(r - 1, start);
+      cell(r, 1, "Subtotal");
+      var subtotalValue = items.reduce(function(sum, it){
+        if (it.excluded) return sum;
+        var m = it.annual ? (it.amount || 0) / 12 : (it.amount || 0);
+        return sum + m;
+      }, 0);
+      var opts = { z: XLSX_CUR };
+      if (items.length) opts.formula = "SUMIFS(D" + start + ":D" + end + ",E" + start + ":E" + end + ',"")';
+      cell(r, 4, subtotalValue, opts);
+      return { nextRow: r + 2, ref: "D" + r };
+    }
+
+    var sections = Array.isArray(snapshot.sections) ? snapshot.sections : [];
+    var totals = snapshot.totals || {};
+    var sectionTotalsById = {};
+    (totals.sectionTotals || []).forEach(function(s){ sectionTotalsById[s.id] = s.monthlyTotal; });
+
+    var row = 1;
+    cell(row, 1, "Income Management"); row += 1;
+    cell(row, 1, "Saved from the interactive ledger " + savedDisplay + "."); row += 1;
+    cell(row, 1, 'Set each row\'s Period to Monthly or Yearly; type anything in Status to exclude a row from its subtotal. Re-import this file into the ledger with its Import button.'); row += 2;
+
+    row = sectionHeader(row, "Income", ["Category", "Monthly (€)"]);
+    var incomeRow = row;
+    cell(row, 1, "Net income (Bank Transfer, after all deductions)");
+    cell(row, 2, snapshot.income || 0, { z: XLSX_CUR });
+    var incomeRef = "B" + incomeRow;
+    row += 2;
+
+    var sectionRefs = [];
+    sections.forEach(function(section){
+      var title = section.title || "Untitled category group";
+      var res = writeCategorySection(row, title, section.items || []);
+      row = res.nextRow;
+      sectionRefs.push({
+        title: title, ref: res.ref,
+        cachedTotal: sectionTotalsById.hasOwnProperty(section.id) ? sectionTotalsById[section.id] : 0
+      });
+    });
+
+    row = sectionHeader(row, "Summary", ["", "Monthly (€)"]);
+    var incomeSummaryRow = row;
+    cell(row, 1, "Net income");
+    cell(row, 2, snapshot.income || 0, { formula: incomeRef, z: XLSX_CUR });
+    row += 1;
+    var firstCategoryRow = row;
+    sectionRefs.forEach(function(sr){
+      cell(row, 1, sr.title);
+      cell(row, 2, sr.cachedTotal || 0, { formula: sr.ref, z: XLSX_CUR });
+      row += 1;
+    });
+    var lastCategoryRow = row - 1;
+
+    var totalRow = row;
+    cell(row, 1, "Total planned expenses");
+    var totalOpts = { z: XLSX_CUR };
+    if (sectionRefs.length) totalOpts.formula = "SUM(B" + firstCategoryRow + ":B" + lastCategoryRow + ")";
+    cell(row, 2, totals.totalExpenses || 0, totalOpts);
+    row += 1;
+
+    var leftoverRow = row;
+    cell(row, 1, "Leftover");
+    cell(row, 2, totals.leftover || 0, { formula: "B" + incomeSummaryRow + "-B" + totalRow, z: XLSX_CUR });
+    row += 1;
+
+    cell(row, 1, "Savings rate");
+    var savingsFraction = snapshot.income ? (totals.leftover || 0) / snapshot.income : 0;
+    cell(row, 2, savingsFraction, { formula: "B" + leftoverRow + "/B" + incomeSummaryRow, z: XLSX_PCT });
+    row += 2;
+
+    cell(row, 1, "All figures entered in the interactive budget ledger. Formulas above recalculate if any value is changed.");
+
+    ws["!ref"] = "A1:E" + row;
+    ws["!cols"] = [{ wch: 46 }, { wch: 14 }, { wch: 10 }, { wch: 16 }, { wch: 12 }];
+
+    return { SheetNames: ["Budget"], Sheets: { Budget: ws } };
+  }
+
+  document.getElementById("export-btn").addEventListener("click", function(){
+    var btn = this;
+    btn.disabled = true;
+    setExportStatus("Preparing your export…", "");
+    (async function(){
+      try {
+        if (typeof XLSX === "undefined") throw { code: "xlsx_missing" };
+
+        var snapshot = buildSnapshot();
+        var now = new Date();
+        var savedDisplay = "on " + now.toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+        var wb = buildLedgerWorkbook(snapshot, savedDisplay);
+        var wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        var blob = new Blob([wbout], { type: "application/octet-stream" });
+        var filename = "income-management-" + now.toISOString().slice(0, 10) + ".xlsx";
+
+        saveBlobToDevice(blob, filename);
+        var stamp = now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+        setExportStatus("Saved at " + stamp + " \u00b7 check Files or Downloads.", "good");
+      } catch (err) {
+        var code = err && err.code;
+        if (code === "declined"){
+          setExportStatus("Export cancelled.", "");
+        } else if (code === "rate_limited"){
+          setExportStatus("A save prompt is already open. Try again in a moment.", "critical");
+        } else if (code === "xlsx_missing"){
+          setExportStatus("Couldn't load the spreadsheet engine (check your connection and try again).", "critical");
+          showCopyFallback();
+        } else if (code === "extension_not_enabled"){
+          setExportStatus("Excel export isn't available in this view.", "critical");
+          showCopyFallback();
+        } else if (code === "bad_request" || code === "transform_error"){
+          setExportStatus("Could not build the export. Try again.", "critical");
+          showCopyFallback();
+        } else {
+          setExportStatus("Export isn't available in this view.", "critical");
+          showCopyFallback();
+        }
+      } finally {
+        btn.disabled = false;
+      }
+    })();
+  });
+
+  function setImportStatus(text, kind){
+    var status = document.getElementById("import-status");
+    status.textContent = text;
+    status.className = "save-status" + (kind ? " " + kind : "");
+  }
+
+  function truthyStatus(v){
+    return String(v == null ? "" : v).trim() !== "";
+  }
+
+  function importFromRows(rows){
+    // rows: array of arrays (sheet_to_json with header:1), as produced by
+    // buildLedgerWorkbook's "Budget" sheet. Category groups are fully custom
+    // now, so a group is recognized by its position (a title row immediately
+    // followed by its category header), not by a fixed name. Three header
+    // shapes are recognized, so exports from before this ledger had custom
+    // groups and per-item periods still import correctly:
+    //   "new"         Category | Amount (€) | Period | Monthly equiv (€) | Status
+    //   "old-monthly" Category | Monthly (€) | Status            (fixed monthly-only groups)
+    //   "old-annual"  Category | Annual (€) | Monthly avg (€) | Status  (the old irregular group)
+    var newIncome = null;
+    var newSections = [];
+    var currentSection = null; // "income" | a section object | null
+    var currentFormat = null;  // "new" | "old-monthly" | "old-annual", matches currentSection
+    var pendingTitle = null;
+
+    for (var i = 0; i < rows.length; i++){
+      var row = rows[i] || [];
+      var a = row[0] == null ? "" : String(row[0]).trim();
+      if (!a) continue;
+
+      if (a === "Summary") break; // everything after this is derived, not needed for import
+      if (a === "Income Management" || a.indexOf("Saved from") === 0 || a.indexOf("Set each row") === 0 || a.indexOf("All figures entered") === 0) continue;
+      if (a.indexOf("Subtotal") === 0){ currentSection = null; currentFormat = null; continue; }
+
+      if (a === "Income"){ currentSection = "income"; currentFormat = null; pendingTitle = null; continue; }
+      var b = row[1] == null ? "" : String(row[1]).trim();
+      if (a === "Category"){
+        if (currentSection === "income" && b === "Monthly (€)") continue; // income's own header row
+        var format = b.indexOf("Amount") === 0 ? "new" : (b === "Monthly (€)" ? "old-monthly" : (b === "Annual (€)" ? "old-annual" : null));
+        if (format){
+          var section = { id: uid(), title: pendingTitle || "", hint: "", items: [] };
+          newSections.push(section);
+          currentSection = section;
+          currentFormat = format;
+          pendingTitle = null;
+          continue;
+        }
+      }
+
+      if (currentSection === "income" && newIncome === null){
+        var incomeVal = parseFloat(row[1]);
+        if (isFinite(incomeVal)) newIncome = incomeVal;
+        currentSection = null;
+        continue;
+      }
+      if (currentSection && typeof currentSection === "object"){
+        var amount = parseFloat(row[1]) || 0;
+        var annual, excluded;
+        if (currentFormat === "old-monthly"){
+          annual = false;
+          excluded = truthyStatus(row[2]);
+        } else if (currentFormat === "old-annual"){
+          annual = true;
+          excluded = truthyStatus(row[3]);
+        } else {
+          var period = String(row[2] || "").trim().toLowerCase();
+          annual = period === "yearly";
+          excluded = truthyStatus(row[4]);
+        }
+        currentSection.items.push({
+          id: uid(), label: a, amount: amount,
+          annual: annual,
+          excluded: excluded
+        });
+        continue;
+      }
+
+      // Not currently inside a recognized block: this row names the next
+      // category group, confirmed once its header row follows.
+      pendingTitle = a;
+    }
+
+    if (newIncome === null && newSections.length === 0){
+      return false; // didn't look like our export at all
+    }
+
+    if (newIncome !== null) incomeInput.value = newIncome;
+    state = newSections;
+    renderSections();
+    recalc();
+    return true;
+  }
+
+  document.getElementById("import-btn").addEventListener("click", function(){
+    document.getElementById("import-file").click();
+  });
+
+  document.getElementById("import-file").addEventListener("change", function(e){
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    setImportStatus("Reading " + file.name + "…", "");
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      try {
+        if (typeof XLSX === "undefined") throw new Error("reader-not-loaded");
+        var data = new Uint8Array(ev.target.result);
+        var wb = XLSX.read(data, { type: "array" });
+        var sheet = wb.Sheets["Budget"] || wb.Sheets[wb.SheetNames[0]];
+        var rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+        var ok = importFromRows(rows);
+        if (ok){
+          setImportStatus('Imported "' + file.name + '".', "good");
+        } else {
+          setImportStatus("That file doesn't look like an export from this ledger.", "critical");
+        }
+      } catch (err) {
+        setImportStatus("Could not read that file. Make sure it's a .xlsx export from this ledger.", "critical");
+      } finally {
+        e.target.value = "";
+      }
+    };
+    reader.onerror = function(){
+      setImportStatus("Could not read that file.", "critical");
+      e.target.value = "";
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  function revealData(){
+    // Always start from a clean slate before loading: switching profiles
+    // without a full page reload would otherwise leave the previous
+    // profile's in-memory income/sections showing through for a profile
+    // that has nothing saved yet.
+    incomeInput.value = 0;
+    state = seedAll();
+    var saved = loadState() || migrateLegacyState();
+    if (saved){
+      incomeInput.value = typeof saved.income === "number" ? saved.income : 0;
+      if (Array.isArray(saved.sections)) state = sanitizeSections(saved.sections);
+    }
+    renderSections();
+    recalc();
+  }
+
+  /* ---------- username + password profiles ----------
+     A client-side privacy screen, not real authentication: the page and its
+     code are always fully present in the browser, so anyone with dev-tools
+     access could bypass this. Its job is to keep numbers off the screen for
+     a casual glance on a shared device, not to secure a publicly shared
+     link. Nothing here is sent anywhere or synced between devices; each
+     profile is just a username + a SHA-256 password hash (salted for any
+     profile created after this feature shipped) stored in this browser,
+     pointing at that profile's own slice of localStorage. */
+  var wrapEl = document.querySelector(".wrap");
+  var lockScreen = document.getElementById("lock-screen");
+  var lockForm = document.getElementById("lock-form");
+  var pickerPanel = document.getElementById("lock-picker-panel");
+  var authPanel = document.getElementById("lock-auth-panel");
+  var profileList = document.getElementById("profile-list");
+  var profileAddBtn = document.getElementById("profile-add-btn");
+  var lockTitle = document.getElementById("lock-title");
+  var lockSub = document.getElementById("lock-sub");
+  var usernameField = document.getElementById("lock-username-field");
+  var usernameInput = document.getElementById("lock-username");
+  var lockPass = document.getElementById("lock-pass");
+  var lockPassLabel = document.getElementById("lock-pass-label");
+  var lockConfirmField = document.getElementById("lock-confirm-field");
+  var lockConfirm = document.getElementById("lock-pass-confirm");
+  var lockError = document.getElementById("lock-error");
+  var lockSubmit = document.getElementById("lock-submit");
+  var lockBackBtn = document.getElementById("lock-back-btn");
+  var lockForgot = document.getElementById("lock-forgot");
+
+  function hasWebCrypto(){
+    return !!(window.crypto && window.crypto.subtle && window.TextEncoder);
+  }
+  function storageAvailable(){
+    // Every write to localStorage in this file is wrapped in a silent
+    // try/catch (so one blocked write can't crash the page), which means a
+    // browser-level block (a "block all cookies" style privacy setting
+    // blocks localStorage too in some browsers, as does private browsing in
+    // older versions) would otherwise fail every save with zero feedback:
+    // the app looks fine while open, then remembers nothing next time.
+    // Probe once up front so that can be surfaced instead of hidden.
+    try {
+      var k = "__income-management-storage-probe__";
+      localStorage.setItem(k, "1");
+      var ok = localStorage.getItem(k) === "1";
+      localStorage.removeItem(k);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function requestPersistentStorage(){
+    // Best-effort only: asks the browser not to silently evict this site's
+    // storage under disk pressure or an inactivity policy (both real,
+    // separate from any explicit privacy block already handled above).
+    // Not every browser grants it, or even implements the ask, and it can
+    // never override an explicit block or private browsing, so nothing else
+    // in the app depends on the outcome.
+    try {
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().catch(function(){});
+      }
+    } catch (e) {}
+  }
+  function sha256Hex(text){
+    var enc = new TextEncoder().encode(text);
+    return window.crypto.subtle.digest("SHA-256", enc).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf), function(b){
+        return b.toString(16).padStart(2, "0");
+      }).join("");
+    });
+  }
+  function randomSalt(){
+    if (window.crypto && window.crypto.getRandomValues){
+      var arr = new Uint8Array(16);
+      window.crypto.getRandomValues(arr);
+      return Array.prototype.map.call(arr, function(b){ return b.toString(16).padStart(2, "0"); }).join("");
+    }
+    return String(Date.now()) + "-" + String(Math.random()).slice(2);
+  }
+  function hashPassword(password, salt){
+    // Profiles migrated from the old single-passphrase version have salt ""
+    // and use the original no-salt formula, so their existing password
+    // keeps working unchanged. Every new profile gets a random salt.
+    return sha256Hex(salt ? (salt + ":" + password) : password);
+  }
+  function normalizeUsername(name){
+    return "p:" + String(name || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  /* ---------- profile registry ---------- */
+  function loadRegistry(){
+    try {
+      var raw = localStorage.getItem(USER_REGISTRY_KEY);
+      var parsed = raw ? JSON.parse(raw) : null;
+      return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  function saveRegistry(reg){
+    try { localStorage.setItem(USER_REGISTRY_KEY, JSON.stringify(reg)); } catch (e) {}
+  }
+  function registryProfiles(reg){
+    return Object.keys(reg).map(function(key){
+      return { key: key, name: reg[key].name || "Untitled", createdAt: reg[key].createdAt || "" };
+    }).sort(function(a, b){
+      return (a.createdAt || "").localeCompare(b.createdAt || "") || a.name.localeCompare(b.name);
+    });
+  }
+  function migrateLegacyProfile(){
+    var reg = loadRegistry();
+    if (!reg[LEGACY_PROFILE_KEY]){
+      var oldHash = null;
+      try { oldHash = localStorage.getItem(LOCK_HASH_KEY); } catch (e) {}
+      if (oldHash){
+        reg[LEGACY_PROFILE_KEY] = { name: "My ledger", salt: "", hash: oldHash, createdAt: new Date(0).toISOString() };
+        saveRegistry(reg);
+      }
+    }
+    return reg;
+  }
+  function getSessionProfileKey(){ try { return sessionStorage.getItem(CURRENT_PROFILE_SESSION_KEY); } catch (e) { return null; } }
+  function setSessionProfileKey(k){ try { sessionStorage.setItem(CURRENT_PROFILE_SESSION_KEY, k); } catch (e) {} }
+  function clearSessionProfileKey(){ try { sessionStorage.removeItem(CURRENT_PROFILE_SESSION_KEY); } catch (e) {} }
+
+  function unlock(){
+    lockScreen.hidden = true;
+    wrapEl.hidden = false;
+    revealData();
+  }
+
+  /* ---------- lock-screen panel states: picker / login / create / reset ---------- */
+  var lockMode = "picker";
+  var selectedProfileKey = null;
+  var forgotConfirmArmed = false;
+  var forgotResetTimer = null;
+
+  function resetForgotArm(){
+    clearTimeout(forgotResetTimer);
+    forgotConfirmArmed = false;
+    lockForgot.textContent = "Forgot password? Reset it";
+  }
+
+  function showPicker(){
+    lockMode = "picker";
+    selectedProfileKey = null;
+    resetForgotArm();
+    var reg = loadRegistry();
+    var profiles = registryProfiles(reg);
+    profileList.innerHTML = "";
+    profiles.forEach(function(p){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "profile-btn";
+      btn.textContent = p.name;
+      btn.addEventListener("click", function(){ startLogin(p.key); });
+      profileList.appendChild(btn);
+    });
+    pickerPanel.hidden = false;
+    authPanel.hidden = true;
+    lockError.textContent = "";
+  }
+
+  function startLogin(key){
+    lockMode = "login";
+    selectedProfileKey = key;
+    resetForgotArm();
+    var reg = loadRegistry();
+    var name = (reg[key] && reg[key].name) || "this profile";
+    pickerPanel.hidden = true;
+    authPanel.hidden = false;
+    usernameField.hidden = true;
+    lockConfirmField.hidden = true;
+    lockTitle.textContent = "Enter password";
+    lockSub.textContent = 'Signing in as "' + name + '".';
+    lockPassLabel.textContent = "Password";
+    lockSubmit.textContent = "Unlock";
+    lockPass.autocomplete = "current-password";
+    lockPass.value = ""; lockConfirm.value = "";
+    lockError.textContent = "";
+    lockBackBtn.hidden = false;
+    lockForgot.hidden = false;
+    lockPass.focus();
+  }
+
+  function startCreate(){
+    lockMode = "create";
+    selectedProfileKey = null;
+    resetForgotArm();
+    var reg = loadRegistry();
+    var hasAny = Object.keys(reg).length > 0;
+    pickerPanel.hidden = true;
+    authPanel.hidden = false;
+    usernameField.hidden = false;
+    usernameInput.value = "";
+    lockConfirmField.hidden = false;
+    lockTitle.textContent = hasAny ? "Add a profile" : "Create a profile";
+    lockSub.textContent = hasAny
+      ? "A separate, private space for someone else's numbers on this device."
+      : "Choose a username and password to keep this ledger private on this device.";
+    lockPassLabel.textContent = "Password";
+    lockSubmit.textContent = "Create profile & continue";
+    lockPass.autocomplete = "new-password";
+    lockConfirm.autocomplete = "new-password";
+    lockPass.value = ""; lockConfirm.value = "";
+    lockError.textContent = "";
+    lockBackBtn.hidden = !hasAny;
+    lockForgot.hidden = true;
+    usernameInput.focus();
+  }
+
+  function startReset(key){
+    lockMode = "reset";
+    selectedProfileKey = key;
+    resetForgotArm();
+    var reg = loadRegistry();
+    var name = (reg[key] && reg[key].name) || "this profile";
+    pickerPanel.hidden = true;
+    authPanel.hidden = false;
+    usernameField.hidden = true;
+    lockConfirmField.hidden = false;
+    lockTitle.textContent = "Reset password";
+    lockSub.textContent = 'Choose a new password for "' + name + '". Its saved numbers stay exactly as they are.';
+    lockPassLabel.textContent = "New password";
+    lockSubmit.textContent = "Set new password & continue";
+    lockPass.autocomplete = "new-password";
+    lockConfirm.autocomplete = "new-password";
+    lockPass.value = ""; lockConfirm.value = "";
+    lockError.textContent = "";
+    lockBackBtn.hidden = false;
+    lockForgot.hidden = true;
+    lockPass.focus();
+  }
+
+  function showLockScreen(){
+    wrapEl.hidden = true;
+    lockScreen.hidden = false;
+    var reg = loadRegistry();
+    if (Object.keys(reg).length === 0) startCreate(); else showPicker();
+  }
+
+  profileAddBtn.addEventListener("click", startCreate);
+  lockBackBtn.addEventListener("click", showPicker);
+
+  lockForgot.addEventListener("click", function(){
+    if (!forgotConfirmArmed){
+      forgotConfirmArmed = true;
+      lockForgot.textContent = "Click again to confirm reset";
+      forgotResetTimer = setTimeout(resetForgotArm, 4000);
+      return;
+    }
+    clearTimeout(forgotResetTimer);
+    forgotConfirmArmed = false;
+    startReset(selectedProfileKey);
+  });
+
+  lockForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var reg = loadRegistry();
+
+    if (lockMode === "login"){
+      var entry = reg[selectedProfileKey];
+      if (!entry){ showPicker(); return; }
+      var pass = lockPass.value;
+      if (!pass) return;
+      hashPassword(pass, entry.salt).then(function(hash){
+        if (hash === entry.hash){
+          activeProfileKey = selectedProfileKey;
+          setSessionProfileKey(selectedProfileKey);
+          unlock();
+        } else {
+          lockError.textContent = "Incorrect password.";
+          lockPass.value = "";
+          lockPass.focus();
+        }
+      });
+      return;
+    }
+
+    if (lockMode === "create"){
+      var rawName = usernameInput.value;
+      var displayName = rawName.trim();
+      var key = normalizeUsername(rawName);
+      if (!displayName){
+        lockError.textContent = "Enter a username.";
+        return;
+      }
+      if (reg[key]){
+        lockError.textContent = "That username is already used on this device. Go back and sign in with it instead.";
+        return;
+      }
+      var newPass = lockPass.value;
+      if (newPass.length < 4){
+        lockError.textContent = "Use at least 4 characters.";
+        return;
+      }
+      if (newPass !== lockConfirm.value){
+        lockError.textContent = "Passwords don't match.";
+        return;
+      }
+      var salt = randomSalt();
+      hashPassword(newPass, salt).then(function(hash){
+        reg[key] = { name: displayName, salt: salt, hash: hash, createdAt: new Date().toISOString() };
+        saveRegistry(reg);
+        activeProfileKey = key;
+        setSessionProfileKey(key);
+        unlock();
+      });
+      return;
+    }
+
+    if (lockMode === "reset"){
+      var entryToReset = reg[selectedProfileKey];
+      if (!entryToReset){ showPicker(); return; }
+      var resetPass = lockPass.value;
+      if (resetPass.length < 4){
+        lockError.textContent = "Use at least 4 characters.";
+        return;
+      }
+      if (resetPass !== lockConfirm.value){
+        lockError.textContent = "Passwords don't match.";
+        return;
+      }
+      var resetSalt = randomSalt();
+      hashPassword(resetPass, resetSalt).then(function(hash){
+        entryToReset.salt = resetSalt;
+        entryToReset.hash = hash;
+        reg[selectedProfileKey] = entryToReset;
+        saveRegistry(reg);
+        activeProfileKey = selectedProfileKey;
+        setSessionProfileKey(selectedProfileKey);
+        unlock();
+      });
+      return;
+    }
+  });
+
+  var lockNowBtn = document.getElementById("lock-now-btn");
+  if (lockNowBtn) lockNowBtn.addEventListener("click", function(){
+    clearSessionProfileKey();
+    activeProfileKey = null;
+    showLockScreen();
+  });
+
+  function initLock(){
+    if (!storageAvailable()){
+      // Nothing can be saved or checked against in this browser right now,
+      // so a profile picker/password prompt would be pure theater. Warn
+      // plainly and let the calculator still be used for this one session.
+      var warning = document.getElementById("storage-warning");
+      if (warning) warning.hidden = false;
+      activeProfileKey = LEGACY_PROFILE_KEY;
+      wrapEl.hidden = false;
+      lockScreen.hidden = true;
+      revealData();
+      return;
+    }
+    requestPersistentStorage();
+    if (!hasWebCrypto()){
+      // No Web Crypto available: don't trap the user behind a lock we can't
+      // check. Fall back to a single, unnamed profile so saving still works.
+      activeProfileKey = LEGACY_PROFILE_KEY;
+      wrapEl.hidden = false;
+      lockScreen.hidden = true;
+      revealData();
+      return;
+    }
+    migrateLegacyLockHash();
+    var reg = migrateLegacyProfile();
+    var sessionKey = getSessionProfileKey();
+    if (sessionKey && reg[sessionKey]){
+      activeProfileKey = sessionKey;
+      unlock();
+      return;
+    }
+    showLockScreen();
+  }
+
+  initLock();
+})();
+</script>
+
+<script>
+/* ---------- add-to-home-screen nudge ----------
+   Only on iOS, only in a browser tab (not already installed), and only until
+   dismissed. Safari exempts home-screen web apps from its 7-day cap on
+   script-writable storage, so installing is what actually makes this ledger
+   durable. https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/ */
+(function(){
+  var HINT_KEY = "income-management-install-hint-dismissed-v1";
+  var el = document.getElementById("install-hint");
+  var dismiss = document.getElementById("install-hint-dismiss");
+  if (!el || !dismiss) return;
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPhone|iPad|iPod/.test(ua) ||
+              (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var standalone = window.navigator.standalone === true ||
+                   (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+  var dismissed = false;
+  try { dismissed = localStorage.getItem(HINT_KEY) === "1"; } catch (e) {}
+  if (isIOS && !standalone && !dismissed) el.hidden = false;
+  dismiss.addEventListener("click", function(){
+    el.hidden = true;
+    try { localStorage.setItem(HINT_KEY, "1"); } catch (e) {}
+  });
+})();
+
+/* ---------- service worker: offline shell ---------- */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){ /* offline use simply stays off */ });
+  });
+}
+</script>
+
+</body>
+</html>

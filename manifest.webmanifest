@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Income Management",
+  "short_name": "Income Mgmt",
+  "description": "Household ledger for planning one income against rent, bills and savings. Figures stay on the device.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#EEF2F1",
+  "theme_color": "#EEF2F1",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
