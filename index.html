@@ -699,7 +699,6 @@ img{max-width:100%}
       <button type="submit" class="save-btn" id="lock-submit">Unlock</button>
       <div class="lock-links">
         <button type="button" class="lock-forgot" id="lock-back-btn" hidden>&larr; Back to profiles</button>
-        <!-- <button type="button" class="lock-forgot" id="lock-forgot" hidden>Forgot password? Reset it</button> -->
       </div>
     </div>
 
@@ -1883,7 +1882,6 @@ img{max-width:100%}
   var lockError = document.getElementById("lock-error");
   var lockSubmit = document.getElementById("lock-submit");
   var lockBackBtn = document.getElementById("lock-back-btn");
-  var lockForgot = document.getElementById("lock-forgot");
 
   function hasWebCrypto(){
     return !!(window.crypto && window.crypto.subtle && window.TextEncoder);
@@ -1983,22 +1981,13 @@ img{max-width:100%}
     revealData();
   }
 
-  /* ---------- lock-screen panel states: picker / login / create / reset ---------- */
+  /* ---------- lock-screen panel states: picker / login / create ---------- */
   var lockMode = "picker";
   var selectedProfileKey = null;
-  var forgotConfirmArmed = false;
-  var forgotResetTimer = null;
-
-  function resetForgotArm(){
-    clearTimeout(forgotResetTimer);
-    forgotConfirmArmed = false;
-    lockForgot.textContent = "Forgot password? Reset it";
-  }
 
   function showPicker(){
     lockMode = "picker";
     selectedProfileKey = null;
-    resetForgotArm();
     var reg = loadRegistry();
     var profiles = registryProfiles(reg);
     profileList.innerHTML = "";
@@ -2018,7 +2007,6 @@ img{max-width:100%}
   function startLogin(key){
     lockMode = "login";
     selectedProfileKey = key;
-    resetForgotArm();
     var reg = loadRegistry();
     var name = (reg[key] && reg[key].name) || "this profile";
     pickerPanel.hidden = true;
@@ -2033,14 +2021,12 @@ img{max-width:100%}
     lockPass.value = ""; lockConfirm.value = "";
     lockError.textContent = "";
     lockBackBtn.hidden = false;
-    lockForgot.hidden = false;
     lockPass.focus();
   }
 
   function startCreate(){
     lockMode = "create";
     selectedProfileKey = null;
-    resetForgotArm();
     var reg = loadRegistry();
     var hasAny = Object.keys(reg).length > 0;
     pickerPanel.hidden = true;
@@ -2059,31 +2045,7 @@ img{max-width:100%}
     lockPass.value = ""; lockConfirm.value = "";
     lockError.textContent = "";
     lockBackBtn.hidden = !hasAny;
-    lockForgot.hidden = true;
     usernameInput.focus();
-  }
-
-  function startReset(key){
-    lockMode = "reset";
-    selectedProfileKey = key;
-    resetForgotArm();
-    var reg = loadRegistry();
-    var name = (reg[key] && reg[key].name) || "this profile";
-    pickerPanel.hidden = true;
-    authPanel.hidden = false;
-    usernameField.hidden = true;
-    lockConfirmField.hidden = false;
-    lockTitle.textContent = "Reset password";
-    lockSub.textContent = 'Choose a new password for "' + name + '". Its saved numbers stay exactly as they are.';
-    lockPassLabel.textContent = "New password";
-    lockSubmit.textContent = "Set new password & continue";
-    lockPass.autocomplete = "new-password";
-    lockConfirm.autocomplete = "new-password";
-    lockPass.value = ""; lockConfirm.value = "";
-    lockError.textContent = "";
-    lockBackBtn.hidden = false;
-    lockForgot.hidden = true;
-    lockPass.focus();
   }
 
   function showLockScreen(){
@@ -2095,18 +2057,6 @@ img{max-width:100%}
 
   profileAddBtn.addEventListener("click", startCreate);
   lockBackBtn.addEventListener("click", showPicker);
-
-  lockForgot.addEventListener("click", function(){
-    if (!forgotConfirmArmed){
-      forgotConfirmArmed = true;
-      lockForgot.textContent = "Click again to confirm reset";
-      forgotResetTimer = setTimeout(resetForgotArm, 4000);
-      return;
-    }
-    clearTimeout(forgotResetTimer);
-    forgotConfirmArmed = false;
-    startReset(selectedProfileKey);
-  });
 
   lockForm.addEventListener("submit", function(e){
     e.preventDefault();
@@ -2163,30 +2113,6 @@ img{max-width:100%}
       return;
     }
 
-    if (lockMode === "reset"){
-      var entryToReset = reg[selectedProfileKey];
-      if (!entryToReset){ showPicker(); return; }
-      var resetPass = lockPass.value;
-      if (resetPass.length < 4){
-        lockError.textContent = "Use at least 4 characters.";
-        return;
-      }
-      if (resetPass !== lockConfirm.value){
-        lockError.textContent = "Passwords don't match.";
-        return;
-      }
-      var resetSalt = randomSalt();
-      hashPassword(resetPass, resetSalt).then(function(hash){
-        entryToReset.salt = resetSalt;
-        entryToReset.hash = hash;
-        reg[selectedProfileKey] = entryToReset;
-        saveRegistry(reg);
-        activeProfileKey = selectedProfileKey;
-        setSessionProfileKey(selectedProfileKey);
-        unlock();
-      });
-      return;
-    }
   });
 
   var lockNowBtn = document.getElementById("lock-now-btn");
